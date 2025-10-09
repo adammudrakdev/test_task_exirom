@@ -2,7 +2,6 @@ package com.example.test_task_exirom.service.subservices
 
 import com.example.test_task_exirom.dto.GetTransactionDto
 import com.example.test_task_exirom.dto.TransactionDto
-import com.example.test_task_exirom.service.utils.LuhnAlgoUtil
 import org.springframework.stereotype.Component
 
 const val REDUCE_CEILING = 9
@@ -16,7 +15,7 @@ class AcquirerRouter(val privatBankPaymentServiceImpl: PaymentService, val otpBa
         for (digit in 0 ..< binCardNumber.length) {
             sum += (binCardNumber[digit]).digitToInt()
         }
-        return if (sum / 2 == 0) privatBankPaymentServiceImpl.processPayment(transactionDto)
+        return if (sum % 2 == 0) privatBankPaymentServiceImpl.processPayment(transactionDto)
         else otpBankPaymentServiceImpl.processPayment(transactionDto)
     }
 }

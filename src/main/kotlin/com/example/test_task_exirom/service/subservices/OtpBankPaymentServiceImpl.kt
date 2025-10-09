@@ -1,5 +1,6 @@
 package com.example.test_task_exirom.service.subservices
 
+import com.example.test_task_exirom.db.DbConnector
 import com.example.test_task_exirom.dto.GetTransactionDto
 import com.example.test_task_exirom.dto.TransactionDto
 import com.example.test_task_exirom.entity.Transaction
@@ -13,16 +14,19 @@ import org.springframework.stereotype.Service
 @Service
 class OtpBankPaymentServiceImpl(val transactionRepository: TransactionRepository): PaymentService {
     override fun processPayment(transactionDto: TransactionDto): GetTransactionDto {
+        println(RED + "Using OTP Acquirer" + RESET)
         val transaction: Transaction = TransactionMapperUtil.mapToEntity(transactionDto)
         transactionRepository.save(transaction)
-        val transactionFromRepo = transactionRepository.getById(transactionRepository.transactionId - 1)
+        val transactionFromRepo = transactionRepository.getById(DbConnector.currentTransactionId.get())
         println(transactionFromRepo)
         Thread.sleep(5000)
         try {
             TransactionProcessingUtil.verifyTransaction(transaction)
             transactionFromRepo.status = TransactionStatus.APPROVED
+            transactionRepository.save(transactionFromRepo)
         } catch (_: TransactionDeniedException) {
             transactionFromRepo.status = TransactionStatus.DENIED
+            transactionRepository.save(transactionFromRepo)
         }
         return TransactionMapperUtil.mapToDto(transactionFromRepo)
     }

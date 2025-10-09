@@ -35,17 +35,7 @@ class ExceptionControllerAdvice {
     fun handleNotValidAmountException(ex: NotValidAmountException): ResponseEntity<ErrorMessageDto> {
 
         val errorMessage = ErrorMessageDto(
-            HttpStatus.NOT_FOUND.value(),
-            ex.message!!
-        )
-        return ResponseEntity(errorMessage, HttpStatus.NOT_FOUND)
-    }
-
-    @ExceptionHandler
-    fun handleTransactionDeniedException(ex: TransactionDeniedException): ResponseEntity<ErrorMessageDto> {
-
-        val errorMessage = ErrorMessageDto(
-            HttpStatus.NOT_FOUND.value(),
+            HttpStatus.NOT_ACCEPTABLE.value(),
             ex.message!!
         )
         return ResponseEntity(errorMessage, HttpStatus.NOT_ACCEPTABLE)
@@ -68,5 +58,14 @@ class ExceptionControllerAdvice {
             ex.message!!
         )
         return ResponseEntity(errorMessage, HttpStatus.UNPROCESSABLE_ENTITY)
+    }
+
+    @ExceptionHandler
+    fun handleHttpMessageNotReadableException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorMessageDto> {
+        val errorMessage = ErrorMessageDto(
+            HttpStatus.BAD_REQUEST.value(),
+            ex.fieldError!!.defaultMessage!!
+        )
+        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
     }
 }
