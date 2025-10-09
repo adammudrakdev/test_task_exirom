@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Pattern
 
 const val CARD_DIGITS_AND_SIZE_REGEX = "\\d{16}"
 const val CVV_DIGITS_AND_SIZE_REGEX = "\\d{3}"
-const val DATE_REGEX = "^(0[1-9]|1[0-2])/[0-9]{2}\$\n"
+const val DATE_REGEX = "^(0[1-9]|1[0-2])/[0-9]{2}$\n"
 
 data class TransactionDto(
     @field:Schema(name = "cardNumber", example = "0000000000000000", required = true)
