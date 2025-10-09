@@ -8,7 +8,7 @@ import kotlin.reflect.KClass
 @Retention(AnnotationRetention.RUNTIME)
 @Constraint(validatedBy = [ValidDateValidator::class])
 annotation class ValidDate(
-    val message: String = "invalid expiryDate: must be after today",
+    val message: String = "invalid expiryDate: must be after today and match pattern MM/YY",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
