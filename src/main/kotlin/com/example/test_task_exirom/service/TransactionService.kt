@@ -30,4 +30,12 @@ class TransactionService(val transactionRepository: TransactionRepository, val a
     fun getAllTransactionsByMerchantId(id: String): List<GetTransactionDto> {
         return TransactionMapperUtil.mapToDtoList(transactionRepository.getAllByMerchantId(id))
     }
+
+    fun getTransactionByIdInternal(id: Long): GetTransactionDto {
+        return TransactionMapperUtil.mapToDtoInternal(transactionRepository.getById(id))
+    }
+
+    fun getAllTransactionsInternal(): List<GetTransactionDto> {
+        return TransactionMapperUtil.mapToDtoListInternal(transactionRepository.getAll())
+    }
 }

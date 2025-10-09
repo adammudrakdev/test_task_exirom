@@ -33,4 +33,14 @@ class TransactionController(val transactionService: TransactionService) {
     fun getAllTransactionsByMerchantId(@PathVariable id: String): List<GetTransactionDto> {
         return transactionService.getAllTransactionsByMerchantId(id)
     }
+
+    @GetMapping("/internal/{id}")
+    fun getTransactionByIdInternal(@PathVariable id: Long): GetTransactionDto {
+        return transactionService.getTransactionByIdInternal(id)
+    }
+
+    @GetMapping("/internal")
+    fun getAllTransactionsInternal(): List<GetTransactionDto> {
+        return transactionService.getAllTransactionsInternal()
+    }
 }
