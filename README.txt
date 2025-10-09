@@ -1,8 +1,26 @@
+1) I decided to two DBs - for transactions and merchants separately,
+since we have to know what merchants we work with before we work with them;
+
+2) I implemented util functions as singleton Kotlin objects - before they can be reused just as functions,
+but there is no need in more than one instance per app;
+
+3) Where applicable, I added const val - to escape magic numbers as much as I can;
+
+4) I provide custom date validator so that user can insert date in the way they are used to, not the way a programmer would do;
+
+5) I decided to have higher level service - TransactionService - above AcquirerRouter
+- because I need not only to get route, but also get transactions from db, for example, which is not Acquirer responsibility;
+
+6) I decided to have global exception handler to clearly communicate errors in input to front instead of eating them backed-wise;
+
+7) I used functional interface (one-function) PaymentService and used abstract class CommonPaymentService,
+since the task says that the logic of evaluation is the same two A and B;
+
 Here you can find some JSON data to test against:
 
 1) Valid (correct Luhn, not expired, all fields are valid)
 {
-  "cardNumber": "4111111111111112",
+  "cardNumber": "4111111111111111",
   "expiryDate": "01/26",
   "cvv": "123",
   "amount": 0.10,
@@ -112,7 +130,7 @@ Here you can find some JSON data to test against:
 
 12) Valid card → OTPBank
 {
-  "cardNumber": "4111111111111111",
+  "cardNumber": "4111111110000000",
   "expiryDate": "01/26",
   "cvv": "123",
   "amount": 10.00,
@@ -122,7 +140,7 @@ Here you can find some JSON data to test against:
 
 13) Invalid request → PrivatBank
 {
-  "cardNumber": "5105105105105100",
+  "cardNumber": "5105105115125221",
   "expiryDate": "12/30",
   "cvv": "123",
   "amount": 50.50,

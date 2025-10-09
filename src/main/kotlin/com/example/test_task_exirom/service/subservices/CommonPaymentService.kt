@@ -12,19 +12,23 @@ import com.example.test_task_exirom.service.utils.TransactionProcessingUtil
 
 abstract class CommonPaymentService(val transactionRepository: TransactionRepository, val acquirer: String): PaymentService {
     override fun processPayment(transactionDto: TransactionDto): GetTransactionDto {
-        println(RED + "Using $acquirer Acquirer" + RESET)
+        println(PURPLE + "Using $acquirer Acquirer" + RESET)
         val transaction: Transaction = TransactionMapperUtil.mapToEntity(transactionDto)
         transactionRepository.save(transaction)
         val transactionFromRepo = transactionRepository.getById(DbConnector.currentTransactionId.get())
-        println(transactionFromRepo)
-        Thread.sleep(5000)
+        for (i in 1..5) {
+            println(BLUE + transactionFromRepo.status.name + RESET)
+            Thread.sleep(1000)
+        }
         try {
             TransactionProcessingUtil.verifyTransaction(transaction)
             transactionFromRepo.status = TransactionStatus.APPROVED
             transactionRepository.save(transactionFromRepo)
+            println(GREEN + transactionFromRepo.status.name + RESET)
         } catch (_: TransactionDeniedException) {
             transactionFromRepo.status = TransactionStatus.DENIED
             transactionRepository.save(transactionFromRepo)
+            println(RED + transactionFromRepo.status.name + RESET)
         }
         return TransactionMapperUtil.mapToDto(transactionFromRepo)
     }
