@@ -4,8 +4,6 @@ import com.example.test_task_exirom.dto.GetTransactionDto
 import com.example.test_task_exirom.dto.TransactionDto
 import org.springframework.stereotype.Component
 
-const val REDUCE_CEILING = 9
-
 @Component
 class AcquirerRouter(val privatBankPaymentServiceImpl: PaymentService, val otpBankPaymentServiceImpl: PaymentService) {
 
