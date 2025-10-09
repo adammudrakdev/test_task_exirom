@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Pattern
 
 const val CARD_DIGITS_AND_SIZE_REGEX = "\\d{16}"
 const val CVV_DIGITS_AND_SIZE_REGEX = "\\d{3}"
-const val MERCHANT_ID_DIGITS_AND_SIZE_REGEX = "\\d{1,32}"
+const val MERCHANT_ID_CHARS_AND_SIZE_REGEX = "^[\\dA-Za-z\\S]{3}$\n"
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TransactionDto(
@@ -37,5 +37,6 @@ data class TransactionDto(
     val currency: Currency,
 
     @field:Schema(name = "merchantId", example = "123456789", required = true)
-    @field:Pattern(regexp = MERCHANT_ID_DIGITS_AND_SIZE_REGEX, message = "merchantId: must match pattern 0, 000, ..., 00000000000000000000000000000000")
+    @field:NotBlank
+    @field:Pattern(regexp = MERCHANT_ID_CHARS_AND_SIZE_REGEX, message = "merchantId: must match patterns 111, 1!a, xyz, etc")
     val merchantId: String)
