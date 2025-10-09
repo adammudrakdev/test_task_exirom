@@ -11,7 +11,6 @@ const val REDUCE_CEILING = 9
 class AcquirerRouter(val privatBankPaymentServiceImpl: PaymentService, val otpBankPaymentServiceImpl: PaymentService) {
 
     fun routeToAcquirer(transactionDto: TransactionDto): GetTransactionDto {
-        LuhnAlgoUtil.validateCardNumberToLuhn(transactionDto.cardNumber)
         val binCardNumber = transactionDto.cardNumber.take(6)
         var sum = 0
         for (digit in 0 ..< binCardNumber.length) {
