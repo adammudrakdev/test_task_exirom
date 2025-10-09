@@ -1,4 +1,4 @@
-package com.example.test_task_exirom.service
+package com.example.test_task_exirom.service.utils
 
 import com.example.test_task_exirom.entity.Transaction
 import com.example.test_task_exirom.exception.TransactionDeniedException
