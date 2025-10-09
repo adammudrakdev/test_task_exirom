@@ -10,7 +10,7 @@ import java.lang.Exception
 class TransactionRepository {
 
     fun save(transaction: Transaction) {
-        transaction.transactionId = DbConnector.nextTransactionId++
+        transaction.transactionId = DbConnector.currentTransactionId.incrementAndGet()
         DbConnector.database[transaction.transactionId] = (transaction)
     }
 
@@ -26,7 +26,7 @@ class TransactionRepository {
         return DbConnector.database.values.toList()
     }
 
-    fun getAllByMerchantId(id: Long) : List<Transaction> {
+    fun getAllByMerchantId(id: String) : List<Transaction> {
         return DbConnector.database.values.filter { t -> id == t.merchantId }.toList()
     }
 }
