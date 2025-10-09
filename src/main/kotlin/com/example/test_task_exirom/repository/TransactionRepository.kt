@@ -7,7 +7,7 @@ import java.lang.Exception
 
 @Repository
 class TransactionRepository {
-    val database: Map<Long, Transaction> = HashMap()
+    val database: Map<Long, Transaction> = LinkedHashMap()
     var transactionId = 1L
 
     fun save(transaction: Transaction) {
@@ -21,5 +21,13 @@ class TransactionRepository {
         } catch (_: Exception) {
             throw NoTransactionException("No transaction with id $id was found!")
         }
+    }
+
+    fun getAll() : List<Transaction> {
+        val transactionList = ArrayList<Transaction>()
+        for (key in database.keys) {
+            transactionList.plus(database[key])
+        }
+        return transactionList
     }
 }
