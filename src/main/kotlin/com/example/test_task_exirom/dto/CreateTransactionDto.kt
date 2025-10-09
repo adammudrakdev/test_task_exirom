@@ -10,22 +10,22 @@ import jakarta.validation.constraints.Pattern
 
 const val CARD_DIGITS_AND_SIZE_REGEX = "\\d{16}"
 const val CVV_DIGITS_AND_SIZE_REGEX = "\\d{3}"
-const val MERCHANT_ID_CHARS_AND_SIZE_REGEX = "^[\\dA-Za-z\\S]{3}$\n"
+const val MERCHANT_ID_CHARS_AND_SIZE_REGEX = "^\\S{3}$"
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TransactionDto(
     @field:Schema(name = "cardNumber", example = "0000000000000000", required = true)
-    @field:NotBlank
+    @field:NotBlank(message = "cardNumber: must not be blank")
     @field:Pattern(regexp = CARD_DIGITS_AND_SIZE_REGEX, message = "cardNumber: must match pattern 0000000000000000")
     val cardNumber: String,
 
     @field:Schema(name = "expiryDate", example = "01/26", required = true)
-    @field:NotBlank
+    @field:NotBlank(message = "expiryDate: must not be blank")
     @field:ValidDate
     val expiryDate: String,
 
     @field:Schema(name = "cvv", example = "000", required = true)
-    @field:NotBlank
+    @field:NotBlank(message = "cvv: must not be blank")
     @field:Pattern(regexp = CVV_DIGITS_AND_SIZE_REGEX, message = "cvv: must match pattern 000")
     val cvv: String,
 
@@ -37,6 +37,6 @@ data class TransactionDto(
     val currency: Currency,
 
     @field:Schema(name = "merchantId", example = "123456789", required = true)
-    @field:NotBlank
+    @field:NotBlank(message = "merchantId: must not be blank")
     @field:Pattern(regexp = MERCHANT_ID_CHARS_AND_SIZE_REGEX, message = "merchantId: must match patterns 111, 1!a, xyz, etc")
     val merchantId: String)
