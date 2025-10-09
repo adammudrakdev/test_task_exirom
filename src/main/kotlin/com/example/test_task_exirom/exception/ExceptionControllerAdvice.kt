@@ -61,7 +61,7 @@ class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler
-    fun handleHttpMessageNotReadableException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorMessageDto> {
+    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorMessageDto> {
         val errorMessage = ErrorMessageDto(
             HttpStatus.BAD_REQUEST.value(),
             ex.fieldError!!.defaultMessage!!
