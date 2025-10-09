@@ -30,4 +30,15 @@ class TransactionRepository {
         }
         return transactionList
     }
+
+    fun getAllByMerchantId(id: Long) : List<Transaction> {
+        val transactionList = ArrayList<Transaction>()
+        for (key in database.keys) {
+            val transaction: Transaction = database[key]!!
+            if (transaction.merchantId == id) {
+                transactionList.plus(transaction)
+            }
+        }
+        return transactionList
+    }
 }

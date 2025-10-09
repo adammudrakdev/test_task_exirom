@@ -41,5 +41,6 @@ data class TransactionDto(
     val currency: Currency,
 
     @field:Schema(name = "merchantId", example = "123456789", required = true)
-    @field:NotBlank
-    val merchantId: String)
+    @field:NotNull
+    @field:Digits(integer = 17, fraction = 0)
+    val merchantId: Long)

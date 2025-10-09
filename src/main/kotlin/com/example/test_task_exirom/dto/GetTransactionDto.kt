@@ -4,4 +4,4 @@ import com.example.test_task_exirom.enum.Currency
 import com.example.test_task_exirom.enum.TransactionStatus
 
 data class GetTransactionDto(val transactionId: Long, val cardNumber: String, val cvv: String, val amount: Double, val currency: Currency,
-                             val merchantId: String, val status: TransactionStatus)
+                             val merchantId: Long, val status: TransactionStatus)

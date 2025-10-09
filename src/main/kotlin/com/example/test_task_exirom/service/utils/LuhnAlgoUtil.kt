@@ -1,7 +1,7 @@
 package com.example.test_task_exirom.service.utils
 
 import com.example.test_task_exirom.exception.CardValidationException
-import com.example.test_task_exirom.service.REDUCE_CEILING
+import com.example.test_task_exirom.service.subservices.REDUCE_CEILING
 
 object LuhnAlgoUtil {
     fun validateCardNumberToLuhn(cardNumber: String) {

@@ -6,7 +6,6 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 const val BASE_YEAR = 2000
-const val BASE_DAY = 1
 
 class ValidDateValidator : ConstraintValidator<ValidDate, String> {
 
