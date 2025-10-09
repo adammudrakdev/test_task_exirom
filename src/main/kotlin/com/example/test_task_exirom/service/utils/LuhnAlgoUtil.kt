@@ -8,6 +8,7 @@ object LuhnAlgoUtil {
         val digits = cardNumber.reversed().split("")
         var sum = 0
         for (i in 0..< digits.size) {
+            if (digits[i] == "") continue
             if (i % 2 != 0) {
                 val doubledCurrent = digits[i].toInt() * 2
                 sum += if (doubledCurrent > REDUCE_CEILING) {
