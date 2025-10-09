@@ -17,9 +17,9 @@ object TransactionMapperUtil {
     }
 
     fun mapToDtoList(transactionList: List<Transaction>): List<GetTransactionDto> {
-        val transactionDtoList: List<GetTransactionDto> = ArrayList<GetTransactionDto>()
+        val transactionDtoList: MutableList<GetTransactionDto> = ArrayList<GetTransactionDto>()
         for (transaction in transactionList) {
-            transactionDtoList.plus(mapToDto(transaction))
+            transactionDtoList.add(mapToDto(transaction))
         }
         return transactionDtoList
     }
