@@ -10,7 +10,9 @@ import java.lang.Exception
 class TransactionRepository {
 
     fun save(transaction: Transaction) {
-        transaction.transactionId = DbConnector.currentTransactionId.incrementAndGet()
+        if (transaction.transactionId == 0L) {
+            transaction.transactionId = DbConnector.currentTransactionId.incrementAndGet()
+        }
         DbConnector.database[transaction.transactionId] = (transaction)
     }
 
