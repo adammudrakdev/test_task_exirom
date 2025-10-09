@@ -16,7 +16,7 @@ abstract class CommonPaymentService(val transactionRepository: TransactionReposi
         val transaction: Transaction = TransactionMapperUtil.mapToEntity(transactionDto)
         transactionRepository.save(transaction)
         val transactionFromRepo = transactionRepository.getById(DbConnector.currentTransactionId.get())
-        for (i in 1..5) {
+        (1..5).forEach { _ ->
             println(BLUE + transactionFromRepo.status.name + RESET)
             Thread.sleep(1000)
         }

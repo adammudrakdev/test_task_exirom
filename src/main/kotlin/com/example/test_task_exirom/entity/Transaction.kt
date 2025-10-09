@@ -2,8 +2,9 @@ package com.example.test_task_exirom.entity
 
 import com.example.test_task_exirom.enum.Currency
 import com.example.test_task_exirom.enum.TransactionStatus
+import java.time.LocalDate
 
-class Transaction(var transactionId: Long = 0L, val cardNumber: String, val cvv: String, val amount: Double, val currency: Currency,
+class Transaction(var transactionId: Long = 0L, val cardNumber: String, val expiryDate: LocalDate, val cvv: String, val amount: Double, val currency: Currency,
                   val merchantId: String, var status: TransactionStatus = TransactionStatus.PENDING) {
 
     override fun toString(): String {
