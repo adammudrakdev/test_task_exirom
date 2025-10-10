@@ -27,7 +27,21 @@ endpoint accessible only from redis container;
 11) When testing project against test data, do not hesitate to look to console - will see some service messages;
 
 ---
-
+### You can also run this app in docker! Just run locally inside project folder:
+# Prepare build
+```sh
+mvn clean package
+```
+# Build Docker image
+```sh
+docker build -t myapp .
+```
+# Run container (detached)
+```sh
+docker run -d --name myapp-container -p 8080:8080 myapp
+```
+# Visit Swagger Docs to explore the app [here](http://localhost:8080/swagger-ui/index.html#/)
+# Alternatively, just visit [remote swagger](https://exirom-tasks.adammudrak.space/swagger-ui/index.html#/) I set up
 ### Important!!!
 Here you can find some JSON data to test against in *POST /transactions* in Swagger:
 
