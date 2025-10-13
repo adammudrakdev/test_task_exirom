@@ -61,11 +61,11 @@ class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler
-    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<ErrorMessageDto> {
-        val errorMessage = ErrorMessageDto(
-            HttpStatus.BAD_REQUEST.value(),
-            ex.fieldError!!.defaultMessage!!
-        )
-        return ResponseEntity(errorMessage, HttpStatus.BAD_REQUEST)
+    fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<Map<String, Any>> {
+        val errorsMap: MutableMap<String, Any> = LinkedHashMap()
+        errorsMap["status"] = HttpStatus.BAD_REQUEST
+        val errorMessagesList: List<String?> = ex.bindingResult.allErrors.map { error -> error.defaultMessage }.toList()
+        errorsMap["errors"] = errorMessagesList
+        return ResponseEntity(errorsMap, HttpStatus.BAD_REQUEST)
     }
 }
