@@ -18,7 +18,7 @@ abstract class CommonPaymentService(val transactionRepository: TransactionReposi
         val transactionFromRepo = transactionRepository.getById(DbConnector.currentTransactionId.get())
         (1..5).forEach { _ ->
             println(BLUE + transactionFromRepo.status.name + RESET)
-            Thread.sleep(1000)
+            Thread.sleep(100)
         }
         try {
             TransactionProcessingUtil.verifyTransaction(transaction)
