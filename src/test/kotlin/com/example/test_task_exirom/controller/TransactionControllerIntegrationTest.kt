@@ -1,12 +1,12 @@
 package com.example.test_task_exirom.controller
 
-import com.example.test_task_exirom.db.DbConnector
-import com.example.test_task_exirom.dto.GetTransactionDto
-import com.example.test_task_exirom.dto.TransactionDto
-import com.example.test_task_exirom.enum.Currency
-import com.example.test_task_exirom.enum.TransactionStatus
-import com.example.test_task_exirom.service.utils.MAX
-import com.example.test_task_exirom.service.utils.MIN
+import com.example.test_task_exirom.infra.db.DbConnector
+import com.example.test_task_exirom.web.transaction.dto.GetTransactionDto
+import com.example.test_task_exirom.web.transaction.dto.TransactionDto
+import com.example.test_task_exirom.component.transaction.model.Currency
+import com.example.test_task_exirom.component.transaction.model.TransactionStatus
+import com.example.test_task_exirom.component.transaction.validation.MAX
+import com.example.test_task_exirom.component.transaction.validation.MIN
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals

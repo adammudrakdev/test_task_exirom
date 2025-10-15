@@ -1,0 +1,26 @@
+package com.example.test_task_exirom.component.transaction.services.slave.acquirer
+
+import com.example.test_task_exirom.component.transaction.model.Transaction
+import com.example.test_task_exirom.component.transaction.model.TransactionStatus
+import com.example.test_task_exirom.component.transaction.exception.TransactionDeniedException
+import org.springframework.stereotype.Service
+
+@Service
+class AcquirerA : Acquirer {
+    override fun approveTransaction(transaction: Transaction): Transaction {
+        return try {
+            verifyTransaction(transaction)
+            transaction.status = TransactionStatus.APPROVED
+            transaction
+        } catch (_: TransactionDeniedException) {
+            transaction.status = TransactionStatus.DENIED
+            transaction
+        }
+    }
+
+    fun verifyTransaction(transaction: Transaction) {
+        if (transaction.cardNumber.last().digitToInt() % 2 != 0) {
+            throw TransactionDeniedException("Transaction was denied. Contact your acquirer")
+        }
+    }
+}

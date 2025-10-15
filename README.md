@@ -2,29 +2,25 @@
 full back-end experience: db, entities, repo, services,controllers, utils, validators, dtos, enums, exceptions
 everything here at your service;
 
-2) POST is slow intentionally to imitate all path of transaction. Refer [here](src/main/kotlin/com/example/test_task_exirom/service/subservices/CommonPaymentService.kt) and set Thread.sleep(0) to speed things up)))
-
-3) I decided to use two DBs - for transactions and merchants separately,
+2) I decided to use two DBs - for transactions and merchants separately,
 since we have to know what merchants we work with before we work with them;
 
-4) I implemented util functions as singleton Kotlin objects - this way, they can be reused just as functions,
+3) I implemented util functions as singleton Kotlin objects - this way, they can be reused just as functions,
 and there is no need in more than one instance per app;
 
-5) Where applicable, I added const val - to escape magic numbers as much as I can;
+4) Where applicable, I added const val - to escape magic numbers as much as I can;
 
-6) I provide custom date validator so that user can insert date in the way they are used to, not the way a programmer would do;
+5) I provide custom date validator so that user can insert date in the way they are used to, not the way a programmer would do;
 
-7) I decided to have higher level service - TransactionService - above AcquirerRouter
+6) I decided to have higher level service - TransactionService - above AcquirerRouter
 because I need not only to get route, but also get transactions from db, for example, which is not Acquirer responsibility;
 
-8) I decided to have global exception handler to clearly communicate errors in input to front instead of eating them backed-wise;
+7) I decided to have global exception handler to clearly communicate errors in input to front instead of eating them backed-wise;
 
-9) I used functional interface (one-function) PaymentService and used abstract class CommonPaymentService,
-since the task says that the logic of evaluation is the same for both A and B;
-
-10) From German, I heard that we temporarily store real card data in Redis. Internal endpoints - are, say, for future another
+8) From German, I heard that we temporarily store real card data in Redis. Internal endpoints - are, say, for future another
 endpoint accessible only from redis container;
-11) When testing project against test data, do not hesitate to look to console - will see some service messages;
+
+9) When testing project against test data, do not hesitate to look to console - will see some service messages;
 
 ---
 ### You can also run this app in docker! Just run locally inside project folder:
@@ -154,7 +150,7 @@ Here you can find some JSON data to test against in *POST /transactions* in Swag
 }
 ```
 
-#### 10) Valid request → PrivatBank
+#### 10) Valid request → AcquirerA
 ```json
 {
   "cardNumber": "4000000000000002",
@@ -166,7 +162,7 @@ Here you can find some JSON data to test against in *POST /transactions* in Swag
 }
 ```
 
-#### 11) Valid card → OTPBank
+#### 11) Valid card → AcquirerB
 ```json
 {
   "cardNumber": "4111111110000000",
@@ -178,7 +174,7 @@ Here you can find some JSON data to test against in *POST /transactions* in Swag
 }
 ```
 
-#### 12) Invalid request → PrivatBank
+#### 12) Invalid request → AcquirerA
 ```json
 {
   "cardNumber": "5105105115125221",
@@ -190,7 +186,7 @@ Here you can find some JSON data to test against in *POST /transactions* in Swag
 }
 ```
 
-#### 13) Invalid request → OTPBank
+#### 13) Invalid request → AcquirerB
 ```json
 {
   "cardNumber": "4012888888881881",
