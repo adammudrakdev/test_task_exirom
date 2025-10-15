@@ -9,11 +9,12 @@ import java.lang.Exception
 @Repository
 class TransactionRepository {
 
-    fun save(transaction: Transaction) {
+    fun save(transaction: Transaction): Transaction {
         if (transaction.transactionId == 0L) {
             transaction.transactionId = DbConnector.currentTransactionId.incrementAndGet()
         }
         DbConnector.database[transaction.transactionId] = (transaction)
+        return transaction
     }
 
     fun getById(id: Long): Transaction {
