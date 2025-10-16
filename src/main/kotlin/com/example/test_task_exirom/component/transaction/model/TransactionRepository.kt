@@ -2,6 +2,7 @@ package com.example.test_task_exirom.component.transaction.model
 
 import com.example.test_task_exirom.component.transaction.exception.TransactionNotFoundException
 import com.example.test_task_exirom.infra.db.DbConnector
+import com.example.test_task_exirom.infra.db.IdGenerator
 import org.springframework.stereotype.Repository
 import java.lang.Exception
 
@@ -10,9 +11,10 @@ class TransactionRepository {
 
     fun save(transaction: Transaction): Transaction {
         if (transaction.transactionId == 0L) {
-            transaction.transactionId = DbConnector.currentTransactionId.incrementAndGet()
+            transaction.transactionId = IdGenerator.nextTransactionId()
         }
         DbConnector.database[transaction.transactionId] = (transaction)
+
         return transaction
     }
 
