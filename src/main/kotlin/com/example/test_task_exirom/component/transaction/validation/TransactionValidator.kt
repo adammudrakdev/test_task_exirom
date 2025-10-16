@@ -1,15 +1,16 @@
 package com.example.test_task_exirom.component.transaction.validation
 
+import com.example.test_task_exirom.common.Constants.MAX
+import com.example.test_task_exirom.common.Constants.MIN
+import com.example.test_task_exirom.common.Utils.isMultipleOfTen
+import com.example.test_task_exirom.common.Utils.isOdd
+import com.example.test_task_exirom.common.Utils.reduceToCeiling
 import com.example.test_task_exirom.infra.db.DbConnector
 import com.example.test_task_exirom.web.transaction.dto.TransactionDto
 import com.example.test_task_exirom.component.transaction.exception.CardValidationException
 import com.example.test_task_exirom.component.transaction.exception.MerchantNotFoundException
 import com.example.test_task_exirom.component.transaction.exception.NotValidAmountException
 import org.springframework.stereotype.Component
-
-const val MIN = 0.1
-const val MAX = 1000000.0
-const val REDUCE_CEILING = 9
 
 @Component
 class TransactionValidator {
@@ -20,24 +21,29 @@ class TransactionValidator {
     }
 
     private fun validateCardNumberToLuhn(cardNumber: String) {
-        val digits = cardNumber.reversed().split("")
-        var sum = 0
-        for (i in 0..< digits.size) {
-            if (digits[i] == "") continue
-            if (i % 2 == 0) {
-                val doubledCurrent = digits[i].toInt() * 2
-                sum += if (doubledCurrent > REDUCE_CEILING) {
-                    doubledCurrent - 9
-                } else {
-                    doubledCurrent
-                }
-            } else {
-                sum += digits[i].toInt()
-            }
-        }
-        if (sum % 10 != 0) {
+        val digits: List<Int> = getDigitsFromCard(cardNumber)
+        val sum: Int = getSumFromDigits(digits)
+        if (!sum.isMultipleOfTen()) {
             throw CardValidationException("Invalid card number! Please try again...")
         }
+    }
+
+    private fun getDigitsFromCard(cardNumber: String): List<Int>  {
+        return cardNumber.reversed().map { it.digitToInt()}
+    }
+
+    private fun getSumFromDigits(digits: List<Int>): Int {
+        var sum = 0
+        for (i in 0..< digits.size) {
+            if (i.isOdd()) {
+                val doubledCurrent = digits[i] * 2
+                sum += doubledCurrent.reduceToCeiling()
+            } else {
+                sum += digits[i]
+            }
+        }
+
+        return sum
     }
 
     private fun validateRange(amount: Double) {
