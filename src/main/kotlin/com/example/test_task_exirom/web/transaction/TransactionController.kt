@@ -1,7 +1,7 @@
 package com.example.test_task_exirom.web.transaction
 
 import com.example.test_task_exirom.component.transaction.services.master.TransactionService
-import com.example.test_task_exirom.web.transaction.dto.GetTransactionDto
+import com.example.test_task_exirom.web.transaction.dto.TransactionResponseDto
 import com.example.test_task_exirom.web.transaction.dto.TransactionDto
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,32 +15,32 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/transactions")
 class TransactionController(val transactionService: TransactionService) {
     @PostMapping
-    fun processTransaction(@Valid @RequestBody transactionDto: TransactionDto): GetTransactionDto {
+    fun processTransaction(@Valid @RequestBody transactionDto: TransactionDto): TransactionResponseDto {
         return transactionService.processTransaction(transactionDto)
     }
 
     @GetMapping("/{id}")
-    fun getTransactionById(@PathVariable id: Long): GetTransactionDto {
+    fun getTransactionById(@PathVariable id: Long): TransactionResponseDto {
         return transactionService.getTransactionById(id)
     }
 
     @GetMapping
-    fun getAllTransactions(): List<GetTransactionDto> {
+    fun getAllTransactions(): List<TransactionResponseDto> {
         return transactionService.getAllTransactions()
     }
 
     @GetMapping("/merchants/{id}")
-    fun getAllTransactionsByMerchantId(@PathVariable id: String): List<GetTransactionDto> {
+    fun getAllTransactionsByMerchantId(@PathVariable id: String): List<TransactionResponseDto> {
         return transactionService.getAllTransactionsByMerchantId(id)
     }
 
     @GetMapping("/internal/{id}")
-    fun getTransactionByIdInternal(@PathVariable id: Long): GetTransactionDto {
+    fun getTransactionByIdInternal(@PathVariable id: Long): TransactionResponseDto {
         return transactionService.getTransactionByIdInternal(id)
     }
 
     @GetMapping("/internal")
-    fun getAllTransactionsInternal(): List<GetTransactionDto> {
+    fun getAllTransactionsInternal(): List<TransactionResponseDto> {
         return transactionService.getAllTransactionsInternal()
     }
 }
