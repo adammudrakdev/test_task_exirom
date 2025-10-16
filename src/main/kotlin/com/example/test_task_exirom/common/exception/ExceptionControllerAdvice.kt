@@ -4,7 +4,6 @@ import com.example.test_task_exirom.component.transaction.exception.CardValidati
 import com.example.test_task_exirom.component.transaction.exception.MerchantNotFoundException
 import com.example.test_task_exirom.component.transaction.exception.NotValidAmountException
 import com.example.test_task_exirom.component.transaction.exception.TransactionNotFoundException
-import com.example.test_task_exirom.component.transaction.services.master.TransactionService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
