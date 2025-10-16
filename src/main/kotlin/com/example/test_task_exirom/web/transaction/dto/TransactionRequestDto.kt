@@ -1,5 +1,9 @@
 package com.example.test_task_exirom.web.transaction.dto
 
+import com.example.test_task_exirom.common.Constants.CARD_DIGITS
+import com.example.test_task_exirom.common.Constants.CARD_SIZE
+import com.example.test_task_exirom.common.Constants.CVV_DIGITS_AND_SIZE_REGEX
+import com.example.test_task_exirom.common.Constants.MERCHANT_ID_CHARS_AND_SIZE_REGEX
 import com.example.test_task_exirom.component.transaction.model.Currency
 import com.example.test_task_exirom.component.transaction.validation.ValidExpiryDate
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
@@ -7,11 +11,6 @@ import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Digits
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-
-const val CARD_DIGITS = "\\d+"
-const val CARD_SIZE = "^.{16}$"
-const val CVV_DIGITS_AND_SIZE_REGEX = "\\d{3}"
-const val MERCHANT_ID_CHARS_AND_SIZE_REGEX = "^\\S{3}$"
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class TransactionDto(
