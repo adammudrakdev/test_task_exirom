@@ -1,12 +1,13 @@
 package com.example.test_task_exirom.controller
 
+import com.example.test_task_exirom.common.Constants.MAX
+import com.example.test_task_exirom.common.Constants.MIN
 import com.example.test_task_exirom.infra.db.DbConnector
-import com.example.test_task_exirom.web.transaction.dto.GetTransactionDto
+import com.example.test_task_exirom.web.transaction.dto.TransactionResponseDto
 import com.example.test_task_exirom.web.transaction.dto.TransactionDto
 import com.example.test_task_exirom.component.transaction.model.Currency
 import com.example.test_task_exirom.component.transaction.model.TransactionStatus
-import com.example.test_task_exirom.component.transaction.validation.MAX
-import com.example.test_task_exirom.component.transaction.validation.MIN
+import com.example.test_task_exirom.infra.db.IdGenerator
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -25,7 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
-import java.util.concurrent.atomic.AtomicLong
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,7 +42,7 @@ class TransactionControllerIntegrationTest {
     @BeforeEach
     fun beforeEach() {
         DbConnector.database.clear()
-        DbConnector.currentTransactionId = AtomicLong(0)
+        IdGenerator.clearIdState()
     }
 
     @Nested
@@ -59,7 +59,7 @@ class TransactionControllerIntegrationTest {
                 Currency.USD,
                 "1qW"))
 
-            val expectedDto = GetTransactionDto(
+            val expectedDto = TransactionResponseDto(
                 1L,
                 "400000******0002",
                 "**/**",
@@ -77,9 +77,9 @@ class TransactionControllerIntegrationTest {
                 .andReturn()
 
             //then
-            val actualDto: GetTransactionDto = objectMapper.treeToValue(
+            val actualDto: TransactionResponseDto = objectMapper.treeToValue(
                 objectMapper.readTree(result.response.contentAsString),
-                GetTransactionDto::class.java)
+                TransactionResponseDto::class.java)
 
             assertEquals(expectedDto, actualDto)
         }
@@ -96,7 +96,7 @@ class TransactionControllerIntegrationTest {
                 Currency.EUR,
                 "2eR"))
 
-            val expectedDto = GetTransactionDto(
+            val expectedDto = TransactionResponseDto(
                 1L,
                 "411111******0000",
                 "**/**",
@@ -114,9 +114,9 @@ class TransactionControllerIntegrationTest {
                 .andReturn()
 
             //then
-            val actualDto: GetTransactionDto = objectMapper.treeToValue(
+            val actualDto: TransactionResponseDto = objectMapper.treeToValue(
                 objectMapper.readTree(result.response.contentAsString),
-                GetTransactionDto::class.java)
+                TransactionResponseDto::class.java)
 
             assertEquals(expectedDto, actualDto)
         }
@@ -133,7 +133,7 @@ class TransactionControllerIntegrationTest {
                 Currency.UAH,
                 "3tY"))
 
-            val expectedDto = GetTransactionDto(
+            val expectedDto = TransactionResponseDto(
                 1L,
                 "401288******1881",
                 "**/**",
@@ -151,9 +151,9 @@ class TransactionControllerIntegrationTest {
                 .andReturn()
 
             //then
-            val actualDto: GetTransactionDto = objectMapper.treeToValue(
+            val actualDto: TransactionResponseDto = objectMapper.treeToValue(
                 objectMapper.readTree(result.response.contentAsString),
-                GetTransactionDto::class.java)
+                TransactionResponseDto::class.java)
 
             assertEquals(expectedDto, actualDto)
         }
@@ -170,7 +170,7 @@ class TransactionControllerIntegrationTest {
                 Currency.USD,
                 "1qW"))
 
-            val expectedDto = GetTransactionDto(
+            val expectedDto = TransactionResponseDto(
                 1L,
                 "510510******5221",
                 "**/**",
@@ -188,9 +188,9 @@ class TransactionControllerIntegrationTest {
                 .andReturn()
 
             //then
-            val actualDto: GetTransactionDto = objectMapper.treeToValue(
+            val actualDto: TransactionResponseDto = objectMapper.treeToValue(
                 objectMapper.readTree(result.response.contentAsString),
-                GetTransactionDto::class.java)
+                TransactionResponseDto::class.java)
 
             assertEquals(expectedDto, actualDto)
         }
