@@ -1,54 +1,70 @@
 package com.example.test_task_exirom.component.transaction.mapper
 
-import com.example.test_task_exirom.web.transaction.dto.GetTransactionDto
+import com.example.test_task_exirom.common.Constants.BIN_END_INDEX
+import com.example.test_task_exirom.common.Constants.LAST_FOUR_START_INDEX
+import com.example.test_task_exirom.common.Constants.MASKED_CARD_MIDDLE_LENGTH
+import com.example.test_task_exirom.common.Constants.MASKED_CVV
+import com.example.test_task_exirom.common.Constants.MASKED_EXPIRY_DATE
+import com.example.test_task_exirom.common.Constants.MASKER_CHAR
+import com.example.test_task_exirom.web.transaction.dto.TransactionResponseDto
 import com.example.test_task_exirom.web.transaction.dto.TransactionDto
 import com.example.test_task_exirom.component.transaction.model.Transaction
 import java.util.ArrayList
 
 object TransactionMapperUtil {
-    fun mapToEntity(transactionDto: TransactionDto): Transaction {
-        return Transaction( cardNumber = transactionDto.cardNumber, expiryDate = DateMapperUtil.toLocalDate(transactionDto.expiryDate),
-            cvv = transactionDto.cvv, amount = transactionDto.amount, currency = transactionDto.currency, merchantId = transactionDto.merchantId)
+    fun TransactionDto.mapToEntity(): Transaction {
+        return Transaction(
+            cardNumber = this.cardNumber,
+            expiryDate = DateMapperUtil.toLocalDate(this.expiryDate),
+            cvv = this.cvv,
+            amount = this.amount,
+            currency = this.currency,
+            merchantId = this.merchantId)
     }
 
-    fun mapToDto(transaction: Transaction): GetTransactionDto {
-        return GetTransactionDto(transaction.transactionId, maskCreditCard(transaction.cardNumber),
-            maskExpiryDate(DateMapperUtil.toExpiryDateDto(transaction.expiryDate)),
-            maskCvv(transaction.cvv), transaction.amount, transaction.currency, transaction.merchantId, transaction.status)
+    fun Transaction.mapToDto(): TransactionResponseDto {
+        return TransactionResponseDto(
+            this.transactionId,
+            maskCreditCard(this.cardNumber),
+            MASKED_EXPIRY_DATE,
+            MASKED_CVV,
+            this.amount,
+            this.currency,
+            this.merchantId,
+            this.status)
     }
 
-    fun mapToDtoInternal(transaction: Transaction): GetTransactionDto {
-        return GetTransactionDto(
-            transaction.transactionId, transaction.cardNumber,
-            DateMapperUtil.toExpiryDateDto(transaction.expiryDate),
-            transaction.cvv, transaction.amount, transaction.currency, transaction.merchantId, transaction.status)
+    fun Transaction.mapToDtoInternal(): TransactionResponseDto {
+        return TransactionResponseDto(
+            this.transactionId,
+            this.cardNumber,
+            DateMapperUtil.toExpiryDateDto(this.expiryDate),
+            this.cvv,
+            this.amount,
+            this.currency,
+            this.merchantId,
+            this.status)
     }
 
-    fun mapToDtoList(transactionList: List<Transaction>): List<GetTransactionDto> {
-        val transactionDtoList: MutableList<GetTransactionDto> = ArrayList<GetTransactionDto>()
-        for (transaction in transactionList) {
-            transactionDtoList.add(mapToDto(transaction))
+    fun List<Transaction>.mapToDtoList(): List<TransactionResponseDto> {
+        val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
+        for (transaction in this) {
+            transactionDtoList.add(transaction.mapToDto())
         }
+
         return transactionDtoList
     }
 
-    fun mapToDtoListInternal(transactionList: List<Transaction>): List<GetTransactionDto> {
-        val transactionDtoList: MutableList<GetTransactionDto> = ArrayList<GetTransactionDto>()
-        for (transaction in transactionList) {
-            transactionDtoList.add(mapToDtoInternal(transaction))
+    fun List<Transaction>.mapToDtoListInternal(): List<TransactionResponseDto> {
+        val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
+        for (transaction in this) {
+            transactionDtoList.add(transaction.mapToDtoInternal())
         }
+
         return transactionDtoList
     }
 
     private fun maskCreditCard(cardNumber: String): String {
-        return cardNumber.replaceRange(6, 12, "*".repeat(6))
-    }
-
-    private fun maskCvv(cvv: String): String {
-        return cvv.replaceRange(0,3, "*".repeat(3))
-    }
-
-    private fun maskExpiryDate(expiryDate: String): String {
-        return expiryDate.replaceRange(0,2, "*".repeat(2)).replaceRange(3, 5, "*".repeat(2))
+        return cardNumber.replaceRange(BIN_END_INDEX, LAST_FOUR_START_INDEX,MASKER_CHAR.repeat(MASKED_CARD_MIDDLE_LENGTH))
     }
 }
