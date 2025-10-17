@@ -19,7 +19,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleCardValidationException(ex: CardValidationException): ResponseEntity<ErrorMessageDto> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorMessage = ErrorMessageDto(
             HttpStatus.NOT_ACCEPTABLE.value(),
             ex.message!!)
@@ -29,7 +29,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleMerchantNotFoundException(ex: MerchantNotFoundException): ResponseEntity<ErrorMessageDto> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorMessage = ErrorMessageDto(
             HttpStatus.NOT_FOUND.value(),
             ex.message!!)
@@ -39,7 +39,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleNotValidAmountException(ex: NotValidAmountException): ResponseEntity<ErrorMessageDto> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorMessage = ErrorMessageDto(
             HttpStatus.NOT_ACCEPTABLE.value(),
             ex.message!!)
@@ -49,7 +49,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleTransactionNotFound(ex: TransactionNotFoundException): ResponseEntity<ErrorMessageDto> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorMessage = ErrorMessageDto(
             HttpStatus.NOT_FOUND.value(),
             ex.message!!)
@@ -59,7 +59,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleHttpMessageNotReadableException(ex: HttpMessageNotReadableException): ResponseEntity<ErrorMessageDto> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorMessage = ErrorMessageDto(
             HttpStatus.UNPROCESSABLE_ENTITY.value(),
             ex.message!!)
@@ -69,7 +69,7 @@ class ExceptionControllerAdvice {
 
     @ExceptionHandler
     fun handleMethodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<Map<String, Any>> {
-        logger.warn(ex.message)
+        logger.error(ex.message)
         val errorsMap: MutableMap<String, Any> = LinkedHashMap()
         errorsMap["status"] = HttpStatus.BAD_REQUEST
         val errorMessagesList: List<String?> = ex.bindingResult.allErrors.map { error -> error.defaultMessage }.toList()
