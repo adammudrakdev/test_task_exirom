@@ -59,82 +59,82 @@ data class TransactionDto(
     @field:Schema(name = "merchantId", example = "123456789", required = true)
     @field:NotBlank(message = "merchantId: must not be blank")
     @field:Pattern(regexp = MERCHANT_ID_CHARS_AND_SIZE_REGEX, message = "merchantId: must be 3 chars long, any chars allowed")
-    val merchantId: String) {
+    val merchantId: String)
 
-    fun TransactionDto.mapToEntity(): Transaction {
-        return Transaction(
-            cardNumber = this.cardNumber,
-            expiryDate = toLocalDate(this.expiryDate),
-            cvv = this.cvv,
-            amount = this.amount,
-            currency = this.currency,
-            merchantId = this.merchantId)
+fun TransactionDto.mapToEntity(): Transaction {
+    return Transaction(
+        cardNumber = this.cardNumber,
+        expiryDate = toLocalDate(this.expiryDate),
+        cvv = this.cvv,
+        amount = this.amount,
+        currency = this.currency,
+        merchantId = this.merchantId)
+}
+
+fun Transaction.mapToDto(): TransactionResponseDto {
+    return TransactionResponseDto(
+        this.transactionId,
+        maskCreditCard(this.cardNumber),
+        MASKED_EXPIRY_DATE,
+        MASKED_CVV,
+        this.amount,
+        this.currency,
+        this.merchantId,
+        this.status)
+}
+
+fun Transaction.mapToDtoInternal(): TransactionResponseDto {
+    return TransactionResponseDto(
+        this.transactionId,
+        this.cardNumber,
+        toExpiryDateDto(this.expiryDate),
+        this.cvv,
+        this.amount,
+        this.currency,
+        this.merchantId,
+        this.status)
+}
+
+fun List<Transaction>.mapToDtoList(): List<TransactionResponseDto> {
+    val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
+    for (transaction in this) {
+        transactionDtoList.add(transaction.mapToDto())
     }
 
-    fun Transaction.mapToDto(): TransactionResponseDto {
-        return TransactionResponseDto(
-            this.transactionId,
-            maskCreditCard(this.cardNumber),
-            MASKED_EXPIRY_DATE,
-            MASKED_CVV,
-            this.amount,
-            this.currency,
-            this.merchantId,
-            this.status)
+    return transactionDtoList
+}
+
+fun List<Transaction>.mapToDtoListInternal(): List<TransactionResponseDto> {
+    val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
+    for (transaction in this) {
+        transactionDtoList.add(transaction.mapToDtoInternal())
     }
 
-    fun Transaction.mapToDtoInternal(): TransactionResponseDto {
-        return TransactionResponseDto(
-            this.transactionId,
-            this.cardNumber,
-            toExpiryDateDto(this.expiryDate),
-            this.cvv,
-            this.amount,
-            this.currency,
-            this.merchantId,
-            this.status)
-    }
+    return transactionDtoList
+}
 
-    fun List<Transaction>.mapToDtoList(): List<TransactionResponseDto> {
-        val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
-        for (transaction in this) {
-            transactionDtoList.add(transaction.mapToDto())
+private fun maskCreditCard(cardNumber: String): String {
+    return cardNumber.replaceRange(BIN_END_INDEX, LAST_FOUR_START_INDEX,MASKER_CHAR.repeat(MASKED_CARD_MIDDLE_LENGTH))
+}
+
+fun toLocalDate(expiryDate: String): LocalDate {
+    val month: Int =
+        if (expiryDate[EXPIRY_MONTH_FIRST_DIGIT_INDEX] == MONTH_PREFIX_FOR_SINGLE_DIGIT) {
+            expiryDate[EXPIRY_MONTH_SECOND_DIGIT_INDEX].digitToInt()
+        } else {
+            ("${expiryDate[EXPIRY_MONTH_FIRST_DIGIT_INDEX]}${expiryDate[EXPIRY_MONTH_SECOND_DIGIT_INDEX]}").toInt()
         }
+    val year: Int = BASE_YEAR + ("${expiryDate[EXPIRY_YEAR_FIRST_DIGIT_INDEX]}${expiryDate[EXPIRY_YEAR_SECOND_DIGIT_INDEX]}").toInt()
 
-        return transactionDtoList
-    }
+    return YearMonth.of(year, month).atEndOfMonth()
+}
 
-    fun List<Transaction>.mapToDtoListInternal(): List<TransactionResponseDto> {
-        val transactionDtoList: MutableList<TransactionResponseDto> = ArrayList<TransactionResponseDto>()
-        for (transaction in this) {
-            transactionDtoList.add(transaction.mapToDtoInternal())
-        }
+fun toExpiryDateDto(expiryDate: LocalDate): String {
+    val month = expiryDate.month.ordinal
+    val year = expiryDate.year.toString().substring(YEAR_STRING_LAST_TWO_DIGITS_INDEX)
 
-        return transactionDtoList
-    }
-
-    private fun maskCreditCard(cardNumber: String): String {
-        return cardNumber.replaceRange(BIN_END_INDEX, LAST_FOUR_START_INDEX,MASKER_CHAR.repeat(MASKED_CARD_MIDDLE_LENGTH))
-    }
-
-    fun toLocalDate(expiryDate: String): LocalDate {
-        val month: Int =
-            if (expiryDate[EXPIRY_MONTH_FIRST_DIGIT_INDEX] == MONTH_PREFIX_FOR_SINGLE_DIGIT) {
-                expiryDate[EXPIRY_MONTH_SECOND_DIGIT_INDEX].digitToInt()
-            } else {
-                ("${expiryDate[EXPIRY_MONTH_FIRST_DIGIT_INDEX]}${expiryDate[EXPIRY_MONTH_SECOND_DIGIT_INDEX]}").toInt()
-            }
-        val year: Int = BASE_YEAR + ("${expiryDate[EXPIRY_YEAR_FIRST_DIGIT_INDEX]}${expiryDate[EXPIRY_YEAR_SECOND_DIGIT_INDEX]}").toInt()
-
-        return YearMonth.of(year, month).atEndOfMonth()
-    }
-
-    fun toExpiryDateDto(expiryDate: LocalDate): String {
-        val month = expiryDate.month.ordinal
-        val year = expiryDate.year.toString().substring(YEAR_STRING_LAST_TWO_DIGITS_INDEX)
-
-        return StringBuilder().append(if (month < OCTOBER_MONTH_NUMBER) MONTH_PREFIX_FOR_SINGLE_DIGIT.plus(month) else month)
-            .append(EXPIRY_DATE_THIRD_CHAR_DELIMITER)
-            .append(year).toString()
-    }
+    return StringBuilder()
+        .append(if (month < OCTOBER_MONTH_NUMBER) MONTH_PREFIX_FOR_SINGLE_DIGIT.plus(month) else month)
+        .append(EXPIRY_DATE_THIRD_CHAR_DELIMITER)
+        .append(year).toString()
 }

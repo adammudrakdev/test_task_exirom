@@ -1,10 +1,5 @@
 package com.example.test_task_exirom.component.transaction.services.master
 
-import com.example.test_task_exirom.component.transaction.mapper.TransactionMapperUtil.mapToDto
-import com.example.test_task_exirom.component.transaction.mapper.TransactionMapperUtil.mapToDtoInternal
-import com.example.test_task_exirom.component.transaction.mapper.TransactionMapperUtil.mapToDtoList
-import com.example.test_task_exirom.component.transaction.mapper.TransactionMapperUtil.mapToDtoListInternal
-import com.example.test_task_exirom.component.transaction.mapper.TransactionMapperUtil.mapToEntity
 import com.example.test_task_exirom.component.transaction.model.Transaction
 import com.example.test_task_exirom.component.transaction.model.TransactionRepository
 import com.example.test_task_exirom.component.transaction.services.slave.AcquirerRouter
@@ -14,6 +9,11 @@ import com.example.test_task_exirom.component.transaction.services.slave.acquire
 import com.example.test_task_exirom.component.transaction.validation.TransactionValidator
 import com.example.test_task_exirom.web.transaction.dto.TransactionResponseDto
 import com.example.test_task_exirom.web.transaction.dto.TransactionDto
+import com.example.test_task_exirom.web.transaction.dto.mapToDto
+import com.example.test_task_exirom.web.transaction.dto.mapToDtoInternal
+import com.example.test_task_exirom.web.transaction.dto.mapToDtoList
+import com.example.test_task_exirom.web.transaction.dto.mapToDtoListInternal
+import com.example.test_task_exirom.web.transaction.dto.mapToEntity
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
